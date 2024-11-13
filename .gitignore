@@ -39,3 +39,4 @@ terraform.rc
 
 # End of https://www.toptal.com/developers/gitignore/api/terraformbfg-1.14.0.jar
 bfg-1.14.0.jar.1
+DevOpsArtFactory.bfg-report
