@@ -1,46 +1,36 @@
-variable "container_external_port" {
-  type    = number
-  default = 8080
-}
-
+# Docker 이미지 생성
 resource "docker_image" "nginx" {
-  name         = "nginx:latest"
+  name         = "nginx:mainline"
   keep_locally = false
 }
 
+# Docker 컨테이너 생성
 resource "docker_container" "nginx" {
+  count = var.deploy_container ? 1 : 0 # 조건문을 사용하여 컨테이너 생성 여부 결정
   image = docker_image.nginx.image_id
-  name  = "nginx"
-
+  name  = "nginx_container"
   ports {
     internal = 80
     external = var.container_external_port
   }
-
   lifecycle {
+    # Prevent use Known port
     precondition {
-      condition     = var.container_external_port != 80
-      error_message = "Don't use Known port(http : 80)"
+      condition = var.container_external_port != 80 
+      error_message = "Don't use Known port(http)"
     }
-
+    # Nginx container cannot created!
     postcondition {
-      condition     = can(self.id)
+      condition = can(self.id)
       error_message = "Nginx container cannot created!!!"
     }
-
-    # postcondition {
-    #   condition     = self.must_run != "true"
-    #   error_message = "nginx not running"
-    # }
-
   }
 }
 
 output "docker_container_id" {
-  value = docker_container.nginx.id
-
+  value = docker_container.nginx[0].id
   precondition {
-    condition     = docker_container.nginx.id == "390db1dd5166219ea4c8625af75d8cece72e434eb79fa3a3a7bf1a1057804b1b"
-    error_message = "Don`t Destroy"
+    condition = docker_container.nginx[0].id != ""
+    error_message = "Don't Destroy"
   }
 }
