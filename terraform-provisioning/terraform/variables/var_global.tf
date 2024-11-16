@@ -13,10 +13,10 @@ variable "atlantis_user" {
 # Add all account ID to here 
 variable "account_id" {
   default = {
-    id        = "066346343248"
-    art-id    = "816736805842"
-    datadog   = "464622532012"
-    sumologic = "926226587429"
+    id = "533267056938"
+    # art-id    = "816736805842"
+    # datadog   = "464622532012"
+    # sumologic = "926226587429"
   }
 }
 

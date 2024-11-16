@@ -1,9 +1,14 @@
+variable "tf-rednine" {
+  type    = string
+  default = "tf-rednine-9777"
+}
+
 provider "aws" {
   region = "ap-northeast-2"
 }
 
 resource "aws_s3_bucket" "tfstate" {
-  bucket = "zerone-id-apnortheast2-tfstate"
+  bucket = "${var.tf-rednine}-apnortheast2-tfstate"
 }
 
 resource "aws_s3_bucket_versioning" "versioning" {
@@ -14,7 +19,7 @@ resource "aws_s3_bucket_versioning" "versioning" {
 }
 
 resource "aws_dynamodb_table" "terraform_state_lock" {
-  name         = "terraform-lock"
+  name         = "${var.tf-rednine}-terraform-lock"
   hash_key     = "LockID"
   billing_mode = "PAY_PER_REQUEST"
 
